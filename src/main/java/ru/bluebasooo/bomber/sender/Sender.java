@@ -1,7 +1,12 @@
 package ru.bluebasooo.bomber.sender;
 
-import ru.bluebasooo.bomber.reconstructor.Mail;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import ru.bluebasooo.bomber.scrapper.reconstructor.Mail;
+
+import java.net.URISyntaxException;
+import java.net.http.HttpResponse;
+import java.util.concurrent.CompletableFuture;
 
 public interface Sender {
-    void sendMail(Mail mail);
+    CompletableFuture<HttpResponse<String>> sendMail(Mail mail) throws JsonProcessingException, URISyntaxException;
 }

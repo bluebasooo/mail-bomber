@@ -1,4 +1,4 @@
-package ru.bluebasooo.bomber.reconstructor.util;
+package ru.bluebasooo.bomber.scrapper.reconstructor.util;
 
 import jakarta.mail.BodyPart;
 import jakarta.mail.Message;

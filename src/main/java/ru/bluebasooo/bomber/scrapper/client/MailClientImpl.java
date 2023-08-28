@@ -4,6 +4,8 @@ import jakarta.mail.*;
 import jakarta.mail.event.MessageCountEvent;
 import jakarta.mail.event.MessageCountListener;
 import lombok.RequiredArgsConstructor;
+import ru.bluebasooo.bomber.consumer.MailConsumer;
+import ru.bluebasooo.bomber.scrapper.dto.UserInfo;
 
 import java.util.Arrays;
 import java.util.Properties;
@@ -20,35 +22,27 @@ public class MailClientImpl implements MailClient {
 
     private Folder inbox;
 
-    private Properties initProps(UserInfo info) {
+    private Properties initProps() {
         var props = new Properties();
-        props.put("mail.transport.protocol", "smtps");
-        props.put("mail.smtp.host", "smtp.yandex.ru");
-        props.put("mail.smtp.port", "465");
-        props.put("mail.smtp.user", info.username());
-        props.put("mail.smtp.ssl.enable", true);
-        props.put("mail.smtp.auth", true);
-        props.put("mail.debug", true);
+        props.put("mail.store.protocol", "imap");
+        props.put("mail.imap.host", userInfo.emailHost());
+        props.put("mail.imap.port", "993");
+        props.put("mail.imap.user", userInfo.username());
+        props.put("mail.imap.auth", "true");
+        props.put("mail.imap.auth.mechanisms", "XOAUTH2");
+        props.put("mail.imaps.starttls.enable", "true");
+        props.put("mail.imap.ssl.enable", "true");
+        props.put("mail.debug", "true");
         return props;
     }
 
     public MailClientImpl createConnection() throws MessagingException {
-        var session = Session.getInstance(
-                initProps(userInfo),
-                new Authenticator() {
-                    @Override
-                    protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication(
-                                userInfo.username(),
-                                userInfo.userPassword()
-                        );
-                    }
-                }
-        );
+        var session = Session.getInstance(initProps());
 
-        inbox = session.getStore().getFolder("INBOX");
+        var store = session.getStore("imap");
+        store.connect(userInfo.emailHost(), userInfo.username(), userInfo.token());
 
-
+        inbox = store.getFolder("INBOX");
 
         return this;
     }
@@ -57,8 +51,8 @@ public class MailClientImpl implements MailClient {
         inbox.addMessageCountListener(new MessageCountListener() {
             @Override
             public void messagesAdded(MessageCountEvent e) {
-                consumer.supplyMessages(
-                        Arrays.stream(e.getMessages())
+                consumer.supplyMessage(
+                       e.getMessages()
                 );
             }
 

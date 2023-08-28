@@ -1,4 +1,4 @@
-package ru.bluebasooo.bomber.reconstructor;
+package ru.bluebasooo.bomber.scrapper.reconstructor;
 
 import java.util.Map;
 

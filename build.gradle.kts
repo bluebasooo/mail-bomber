@@ -35,8 +35,15 @@ dependencies {
 
 dependencies {
     implementation("jakarta.mail:jakarta.mail-api:2.1.2")
-    implementation("org.jsoup:jsoup:1.16.1")
+    implementation("org.eclipse.angus:jakarta.mail:2.0.2")
 
+    implementation("org.jsoup:jsoup:1.16.1")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.15.2")
+    implementation("com.fasterxml.jackson.core:jackson-core:2.15.2")
+}
+
+dependencies {
+    implementation("org.postgresql:postgresql:42.6.0")
 }
 
 dependencyManagement {

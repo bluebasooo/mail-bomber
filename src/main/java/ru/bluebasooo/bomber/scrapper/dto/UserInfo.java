@@ -1,7 +1,7 @@
-package ru.bluebasooo.bomber.scrapper.client;
+package ru.bluebasooo.bomber.scrapper.dto;
 
 public record UserInfo(
       String emailHost,
       String username,
-      String userPassword
+      String token
 ) { }
